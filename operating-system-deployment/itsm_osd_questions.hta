@@ -1,0 +1,330 @@
+<head>
+    <title>ITS SCCM Operating System Deployment</title>
+    <hta:application
+        id="itssccmosd"
+        applicationname="ITS SCCM Operating System Deployment"
+        scroll="yes"
+        singleinstance="yes">
+
+    <style type="text/css">
+    body {
+        background-color: #eeeeee;
+        font-family: calibri, sans-serif;
+        margin: 20px;
+    }
+    img {
+        vertical-align: middle;
+    }
+    p {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        font-style: italic;
+    }
+    fieldset {
+        margin: auto;
+        padding: 10px;
+    }
+    legend {
+        font-weight: bold;
+        padding: 5px;
+    }
+    #ApplicationsColumnLeft {
+        float: left;
+        margin-right: 20px;
+    }
+    #ApplicationsColumnRight {
+        /*float: right;*/
+    }
+    .button {
+        width: 85px;
+    }
+    select, .text-input {
+        width: 250px;
+        margin-bottom: 5px;
+    }
+    .indent {
+        margin-left: 20px;
+    }
+    .hidden {
+        display: none;
+    }
+    </style>
+
+</head>
+
+<body onload="document.getElementById('ComputerName').focus();">
+
+    <script language="vbscript">
+    <!--
+        'Hide task sequence progress'
+        Set p = CreateObject("Microsoft.SMS.TSProgressUI")
+        p.CloseProgressDialog
+
+        Sub BailOut
+            Window.Close
+        End Sub
+
+        Sub OperatingSystemChanged
+            If OperatingSystem.Value = "Windows 8.1 (64-bit)" Then
+                IE11.Checked = True
+                IE11.Disabled = True
+                FlashPlayerActiveXYesNo.Checked = False
+                FlashPlayerActiveXYesNo.Disabled = True
+            Else
+                IE11.Disabled = False
+                FlashPlayerActiveXYesNo.Disabled = False
+            End If
+        End Sub
+
+        Sub LetsRoll
+
+            Set e = CreateObject("Microsoft.SMS.TSEnvironment")
+
+            'Set Computer Name'
+            If Len(ComputerName.Value) > 0 Then
+                e("OSDComputerName") = ComputerName.Value
+            Else
+                Message = "You didn't specify a computer name. Please try again."
+                MsgBox Message, vbOKOnly + vbExclamation, "Missing Computer Name"
+                Exit Sub
+            End If
+
+            e("Department") = Department.Value
+
+            'Set Windows version'
+            e("OperatingSystem") = OperatingSystem.Value
+            e("Office") = Office.Value
+
+            e("IE11") = "No"
+            If IE11.Checked Then
+                e("IE11") = "Yes"
+            End If
+
+            e("SCEP") = "No"
+            If SCEP.Checked Then
+                e("SCEP") = "Yes"
+            End If
+
+            e("MicrosoftUpdate") = "No"
+            If MUYesNo.Checked Then
+                e("MicrosoftUpdate") = "Yes"
+            End If
+
+            e("BitLocker") = "No"
+            If BitLocker.Checked Then
+                e("BitLocker") = "Yes"
+            End If
+
+            'Set variables for application installation'
+
+            e("Pdf") = Pdf.Value
+            e("UtBackupOrg") = UtBackupOrg.Value
+
+            e("AbsoluteManageAgent") = "No"
+            If AbsoluteManageYesNo.Checked Then
+                e("AbsoluteManageAgent") = "Yes"
+            End If
+
+            e("BomgarJumpClient") = "No"
+            If BomgarJumpClientYesNo.Checked Then
+                e("BomgarJumpClient") = "Yes"
+            End If
+
+            e("FileZilla") = "No"
+            If FileZillaYesNo.Checked Then
+                e("FileZilla") = "Yes"
+            End If
+
+            e("FireAmp") = "No"
+            If FireAmpYesNo.Checked Then
+                e("FireAmp") = "Yes"
+            End If
+
+            e("FirstClass") = "No"
+            If FirstClassYesNo.Checked Then
+                e("FirstClass") = "Yes"
+            End If
+
+            e("FlashPlayerActiveX") = "No"
+            If FlashPlayerActiveXYesNo.Checked Then
+                e("FlashPlayerActiveX") = "Yes"
+            End If
+
+            e("FlashPlayerPlugin") = "No"
+            If FlashPlayerPluginYesNo.Checked Then
+                e("FlashPlayerPlugin") = "Yes"
+            End If
+
+            e("Chrome") = "No"
+            If ChromeYesNo.Checked Then
+                e("Chrome") = "Yes"
+            End If
+
+            e("Java") = "No"
+            If JavaYesNo.Checked Then
+                e("Java") = "Yes"
+            End If
+
+            e("AntiMalware") = "No"
+            If AntiMalwareYesNo.Checked Then
+                e("AntiMalware") = "Yes"
+            End If
+
+            e("Firefox") = "No"
+            If FirefoxYesNo.Checked Then
+                e("Firefox") = "Yes"
+            End If
+
+            e("Pidgin") = "No"
+            If PidginYesNo.Checked Then
+                e("Pidgin") = "Yes"
+            End If
+
+            e("QuickTime") = "No"
+            If QuickTimeYesNo.Checked Then
+                e("QuickTime") = "Yes"
+            End If
+
+            e("Qws") = "No"
+            If QwsYesNo.Checked Then
+                e("Qws") = "Yes"
+            End If
+
+            e("Shockwave") = "No"
+            If ShockwaveYesNo.Checked Then
+                e("Shockwave") = "Yes"
+            End If
+
+            e("Skype") = "No"
+            If SkypeYesNo.Checked Then
+                e("Skype") = "Yes"
+            End If
+
+            e("Spark") = "No"
+            If SparkYesNo.Checked Then
+                e("Spark") = "Yes"
+            End If
+
+            e("Vlc") = "No"
+            If VlcYesNo.Checked Then
+                e("Vlc") = "Yes"
+            End If
+
+            e("Vpn") = "No"
+            If VpnYesNo.Checked Then
+                e("Vpn") = "Yes"
+            End If
+
+            Window.Close
+
+        End Sub
+    -->
+    </script>
+
+    <h1><img src="its-logo-small-qwhite.png" alt="ITS" /> SCCM OSD</h1>
+    <p>Please send any feedback to the IT Systems Management team (itsm@utlists.utexas.edu).<p>
+
+    <fieldset id="ComputerNameFieldset">
+        <legend>Computer Name</legend>
+        <p>Please enter a valid computer name. If joining the domain, the computer object should already exist.<p>
+        <input type="text" id="ComputerName" name="ComputerName" class="text-input"><br />
+        <select class="hidden" name="Department">
+            <option value="None">Select a department</option>
+        </select>
+    </fieldset>
+
+    <fieldset id="WindowsFieldset">
+        <legend>Microsoft Stuff</legend>
+        <p>Please select the version of Windows you would like to install.</p>
+        <select name="OperatingSystem" onchange="OperatingSystemChanged()">
+            <option value="Windows 7 (64-bit)">Windows 7 (64-bit)</option>
+            <option value="Windows 8.1 (64-bit)">Windows 8.1 (64-bit)</option>
+            <option value="Windows 7 (32-bit)">Windows 7 (32-bit)</option>
+        </select><br />
+        <select name="Office">
+            <option value="None">Do not install Microsoft Office</option>
+            <option value="2010">Microsoft Office 2010</option>
+            <option value="2013">Microsoft Office 2013</option>
+        </select><br />
+        <input type="checkbox" name="IE11" id="IE11" checked />
+        <label for="IE11">Internet Explorer 11</label><br />
+        <input type="checkbox" name="SCEP" id="SCEP" checked />
+        <label for="SCEP">System Center 2012 Endpoint Protection</label><br />
+        <input type="checkbox" name="MUYesNo" id="MUYesNo" />
+        <label for="MUYesNo">Install any available Microsoft Updates</label><br />
+        <input type="checkbox" name="BitLocker" id="BitLocker" />
+        <label for="BitLocker">Encrypt with BitLocker</label><br />
+    </fieldset>
+
+    <fieldset id="ApplicationsFieldset">
+        <legend>Applications</legend>
+        <p>Please select any additional applications you would like to install.</p>
+        <div id="ApplicationsColumnLeft">
+            <select name="Pdf">
+                <option value="None">Do not install Adobe Acrobat/Reader</option>
+                <option value="Pro9">Acrobat Pro 9</option>
+                <option value="ProX">Acrobat Pro X</option>
+                <option value="ProXI">Acrobat Pro XI</option>
+                <option value="Reader">Adobe Reader XI</option>
+            </select><br />
+            <input type="checkbox" name="AbsoluteManageYesNo" id="AbsoluteManageYesNo" />
+            <label for="AbsoluteManageYesNo">Absolute Manage Agent</label><br />
+            <input type="checkbox" name="BomgarJumpClientYesNo" id="BomgarJumpClientYesNo" />
+            <label for="BomgarJumpClientYesNo">Bomgar Jump Client</label><br />
+            <input type="checkbox" name="FileZillaYesNo" id="FileZillaYesNo" />
+            <label for="FileZillaYesNo">FileZilla Client</label><br />
+            <input type="checkbox" name="FireAmpYesNo" id="FireAmpYesNo" />
+            <label for="FireAmpYesNo">FireAMP</label><br />
+            <input type="checkbox" name="FirstClassYesNo" id="FirstClassYesNo" />
+            <label for="FirstClassYesNo">FirstClass</label><br />
+            <input type="checkbox" name="FlashPlayerActiveXYesNo" id="FlashPlayerActiveXYesNo" />
+            <label for="FlashPlayerActiveXYesNo">Flash Player ActiveX</label><br />
+            <input type="checkbox" name="FlashPlayerPluginYesNo" id="FlashPlayerPluginYesNo" />
+            <label for="FlashPlayerPluginYesNo">Flash Player Plugin</label><br />
+            <input type="checkbox" name="ChromeYesNo" id="ChromeYesNo" />
+            <label for="ChromeYesNo">Google Chrome</label><br />
+            <input type="checkbox" name="JavaYesNo" id="JavaYesNo" />
+            <label for="JavaYesNo">Java Runtime Environment</label><br />
+            <input type="checkbox" name="AntiMalwareYesNo" id="AntiMalwareYesNo" />
+            <label for="AntiMalwareYesNo">Malwarebytes&rsquo; Anti-Malware</label><br />
+        </div>
+        <div id="ApplicationsColumnRight">
+            <select name="UtBackupOrg">
+                <option value="None">Do not install UTBackup</option>
+                <option value="Generic">UTBackup without org</option>
+                <option value="IPSI">UTBackup for IPSI</option>
+                <option value="ITS-APP">UTBackup for ITS-APP</option>
+                <option value="ITS-CIO">UTBackup for ITS-CIO</option>
+                <option value="ITS-CSS">UTBackup for ITS-CSS</option>
+                <option value="ITS-SYS">UTBackup for ITS-SYS</option>
+                <option value="ITS-TN">UTBackup for ITS-TN</option>
+                <option value="ITS-UDC">UTBackup for ITS-UDC</option>
+                <option value="UO-HRS">UTBackup for UO-HRS</option>
+                <option value="UO-TRS">UTBackup for UO-TRS</option>
+            </select><br />
+            <input type="checkbox" name="FirefoxYesNo" id="FirefoxYesNo" />
+            <label for="FirefoxYesNo">Mozilla Firefox</label><br />
+            <input type="checkbox" name="PidginYesNo" id="PidginYesNo" />
+            <label for="PidginYesNo">Pidgin</label><br />
+            <input type="checkbox" name="QuickTimeYesNo" id="QuickTimeYesNo" />
+            <label for="QuickTimeYesNo">QuickTime</label><br />
+            <input type="checkbox" name="QwsYesNo" id="QwsYesNo" />
+            <label for="QwsYesNo">QWS3270 Secure</label><br />
+            <input type="checkbox" name="ShockwaveYesNo" id="ShockwaveYesNo" />
+            <label for="ShockwaveYesNo">Shockwave Player</label><br />
+            <input type="checkbox" name="SkypeYesNo" id="SkypeYesNo" />
+            <label for="SkypeYesNo">Skype</label><br />
+            <input type="checkbox" name="SparkYesNo" id="SparkYesNo" />
+            <label for="SparkYesNo">Spark</label><br />
+            <input type="checkbox" name="VlcYesNo" id="VlcYesNo" />
+            <label for="VlcYesNo">VLC media player</label><br />
+            <input type="checkbox" name="VpnYesNo" id="VpnYesNo" />
+            <label for="VpnYesNo">VPN Client</label><br />
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Rock, Rock On</legend>
+        <input type="button" class="button" name="RunButton" id="RunButton" value="Let&rsquo;s Roll" onclick="LetsRoll()" />
+        <input type="button" class="button" name="BailButton" id="BailButton" value="Bail Out" onclick="BailOut()" />
+    </fieldset>
+</body>
